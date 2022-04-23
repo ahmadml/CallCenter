@@ -1,0 +1,125 @@
+<div class="col-md-4">
+    <div class="card card-chart">
+      <div class="card-header card-header-success" >
+        <div class="ct-chart" id="dailySalesChart">זמן המתנה</div>
+      </div>
+      <div class="card-body">
+        <canvas id="myChart" width="400" height="400"></canvas>
+        <h4 class="card-title">זמן המתנה</h4>
+      </div>
+      <div class="card-footer">
+        <div class="stats">
+          <i class="material-icons">access_time</i> updated 4 minutes ago
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card card-chart">
+      <div class="card-header card-header-warning">
+        <div class="ct-chart" id="websiteViewsChart">שיחות ממתינות</div>
+      </div>
+      <div class="card-body">
+        <canvas id="Chart" width="400" height="400"></canvas>
+        <h4 class="card-title">שיחות ממתינות</h4>
+      </div>
+      <div class="card-footer">
+        <div class="stats">
+          <i class="material-icons">access_time</i> updated 4 minutes ago
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="col-md-4">
+    <div class="card card-chart">
+      <div class="card-header card-header-danger">
+        <div class="ct-chart" id="completedTasksChart"></div>
+      </div>
+      <div class="card-body">
+        <h4 class="card-title">Completed Tasks</h4>
+        <p class="card-category">Last Campaign Performance</p>
+      </div>
+      <div class="card-footer">
+        <div class="stats">
+          <i class="material-icons">access_time</i> campaign sent 2 days ago
+        </div>
+      </div>
+    </div>
+  </div> -->
+  <!-- <script>
+  
+    document.querySelector('h1').innerHTML = hourtime5min[0];
+    var x = []
+    var y = []
+    chartIt();
+    chartIt1();
+    async function chartIt() {
+      ;
+        await getData();
+     
+        const ctx = document.getElementById('myChart').getContext('2d');
+
+        const myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: x,
+                datasets: [{
+                    label: '# of Votes',
+                    data:y,
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        
+    }
+    function getData(){
+      for (let i = 0; i < 2; i++) {
+        x.push(i);
+        y.push(i);
+         //document.querySelector('h1').innerHTML = hourtime5min[i];
+      }
+    }
+    function chartIt1() {
+        //await getData();
+        const ctx = document.getElementById('Chart').getContext('2d');
+
+        const myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8],
+                datasets: [{
+                    label: '# of Votes',
+                    data:[1,2,3,4],
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+    // function getData(){
+    //   for (let i = 0; i < 5; i++) {
+    //     x.push(i)
+    //        y.push(i)
+        
+    //   }
+    // }
+    
+    
+</script> -->

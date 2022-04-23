@@ -1,0 +1,158 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!--
+        https://medium.com/@noufel.gouirhate/build-a-simple-chat-app-with-node-js-and-socket-io-ea716c093088xc
+        https://hmh.engineering/experimenting-with-apache-kafka-and-nodejs-5c0604211196
+        https://www.sitepoint.com/using-redis-node-js/
+    -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script> -->
+    <!-- <script src="https://cdn.socket.io/socket.io-3.0.1.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
+    <!-- <script src="../index.js"></script> -->
+    <script>
+
+        const socket = io('http://localhost:3000')
+
+        socket.on('connection')
+
+
+        function requestCall() {
+            var totalCalls = parseInt(document.getElementById("total").value) || 0;
+            if (parseInt(totalCalls) > 0) {
+               var watingCalls = (--totalCalls);
+            }
+            else var watingCalls = 0
+            socket.emit('getcall',watingCalls);
+        }
+
+        socket.on('call', (data) => {
+            //document.querySelector('h1').innerHTML = document.getElementById("Set").data-
+            startConv(data)
+        })
+        
+        function sendMessage(total) {
+            const date = Date.now();
+            var totalWaiting = {};
+            totalWaiting.Date = date;
+            totalWaiting.totalset = total;
+            socket.emit("totalWaitingCalls", {totalWaiting});
+        }
+
+
+    </script>
+    
+    <script>
+
+        function startConv(data) {
+
+            var totalCalls = parseInt(document.getElementById("total").value) || 0;
+            if (parseInt(totalCalls) === 0)  { alert("No waiting calls !!!"); return}
+
+            else if (parseInt(totalCalls) > 0) {
+                document.getElementById("total").value = (--totalCalls) + "";
+            }
+                var tr = document.getElementById('openConversations').insertRow();
+                var cStart = tr.insertCell(0);
+                var cId = tr.insertCell(1);
+                var cName = tr.insertCell(2);
+                var cCity = tr.insertCell(3);
+                var cGender = tr.insertCell(4);
+                var cAge = tr.insertCell(5);
+                var cPrev = tr.insertCell(6);
+                var cProduct = tr.insertCell(7);
+                var cTopic = tr.insertCell(8);
+                var cEnd = tr.insertCell(9);
+
+                const date = Date.now();
+                const dateTimeFormat = new Intl.DateTimeFormat('en', { year: 'numeric', month: 'short', day: '2-digit', hour: 'numeric', minute: 'numeric' })
+                const [{ value: month }, , { value: day }, , { value: year }, , { value: hour }, , { value: minute }] = dateTimeFormat.formatToParts(date)
+                
+                const age = 2022 - data.Dateofbirth.substring(6, 10);
+                
+                cStart.innerHTML = "<div id=" + date + ">" + `${day}-${month}-${year} ,${hour}:${minute}` + "</div>";
+                cId.innerHTML = "<div id ="+ data.PersonID +">" + `${data.PersonID}` + "</div>";
+                cName.innerHTML = "<div id ="+ data.LastName +">" + `${data.LastName}` + "</div>";
+                cCity.innerHTML = "<div id ="+ data.City +">" + `${data.City}` + "</div>";
+                cTopic.innerHTML = "<select><option value='entrnet'>אינטרנט ביתי</option><option value='kablem'>כבלים</option><option value='cluler'>סלולרי</option><option value='all'>כולם</option></select>";
+                cProduct.innerHTML = "<select><option value='joining'>הצטרפות</option><option value='Service'>שירות</option><option value='complaint'>תלונה</option><option value='Disconnection'>בקשת ניתוק</option></select>";
+                cAge.innerHTML = "<div id ="+ age +">" + `${age}` + "</div>";
+                cPrev.innerHTML = "<div id ="+ data.PrevCall +">" + `${data.PrevCall}` + "</div>";
+                cGender.innerHTML = "<div id ="+ data.Gender +">" + `${data.Gender}` + "</div>";
+                cEnd.innerHTML = "<button onclick='reportEndCall(this.parentNode.parentNode)'>סיום</button>";
+
+            
+        }
+
+        function reportEndCall(row) {
+            //var totalCalls = parseInt(document.getElementById("total").value) || 0;
+            // if (parseInt(totalCalls) > 0) {
+            //     document.getElementById("total").value = (--totalCalls) + "";
+            // }
+            const date = Date.now();
+            const dateTimeFormat = new Intl.DateTimeFormat('en', {hour: 'numeric', minute: 'numeric' })
+            const [{ value: hour }, , { value: minute }] = dateTimeFormat.formatToParts(date)
+                
+            var message = {};
+            message.startcall = hour + ":" + minute;
+            message.id = row.cells[0].getElementsByTagName('div')[0].id;
+            message.CusId = row.cells[1].getElementsByTagName('div')[0].id;
+            message.Name = row.cells[2].getElementsByTagName('div')[0].id;
+            message.city = row.cells[3].getElementsByTagName('div')[0].id;
+            message.topic = row.cells[8].getElementsByTagName('select')[0].value;
+            message.Product = row.cells[7].getElementsByTagName('select')[0].value;
+            message.gender = row.cells[4].getElementsByTagName('div')[0].id;
+            message.age = row.cells[5].getElementsByTagName('div')[0].id;
+            message.prev = row.cells[6].getElementsByTagName('div')[0].id;
+            message.totalTime = (parseInt(Date.now()) - parseInt(message.id)) / 1000; // seconds
+
+            socket.emit("callDetails", message);
+            deleteRow(row);
+        }
+
+        function deleteRow(row) {
+            var i = row.rowIndex;
+            document.getElementById('openConversations').deleteRow(i);
+        }
+
+
+    </script>
+</head>
+
+<body>
+    <h1></h1>
+
+    Total Waiting calls:
+    <input type="number" id="total" min="0" max="11" value="0">
+    <input type="button" id="Set" value="Set" onclick="sendMessage(total.value)" data-="Date.now()"/>
+    &nbsp;
+    <select>
+        <option value='Emergency'>חגים</option>
+        <option>חופשות קיץ</option>
+        <option>ימים רגילים</option>
+    </select>
+    <hr>
+    <input id="Answer Call" type="button" onclick="requestCall()" value="Answer Call" />
+    <table id="openConversations" border="1" style="background-color: burlywood;">
+        <tr>
+            <th>Start Time</th>
+            <th>Id</th>
+            <th>Name</th>
+            <th>City</th>
+            <th>Gender</th>
+            <th>Age</th>
+            <th>Prev.calls</th>
+            <th>Product</th>
+            <th>Topic</th>
+            <th>End</th>
+        </tr>
+    </table>
+
+
+</body>
+
+</html>

@@ -1,0 +1,185 @@
+<!--
+=========================================================
+Material Dashboard - v2.1.2
+=========================================================
+
+Product Page: https://www.creative-tim.com/product/material-dashboard
+Copyright 2020 Creative Tim (https://www.creative-tim.com)
+Coded by Creative Tim
+
+=========================================================
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. -->
+<!DOCTYPE html>
+<html>
+
+<head>
+  <%- include("../partials/headers") %>
+    <!--ariel ws-->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+  
+    
+</head>
+
+<body class="" onload="setWs()">
+  <h1></h1>
+  <div class="wrapper ">
+    <%- include("../partials/sidebar") %>
+      <div class="main-panel">
+        <%- include("../partials/navbar") %>
+          <div class="content">
+            <div class="container-fluid">
+              <div class="row">
+                <!--start-->
+                <% cards.forEach(function(card) { %>
+                  <%- include("../partials/card",card) %>
+                    <% }); %>
+                      <!--end-->
+              </div>
+              <div class="row">
+                <%- include("../partials/graphs",graphs[0]) %>
+                <%- include("../partials/table") %>
+              </div>
+              <!-- <div class="row">
+                <%- include("../partials/taskscard") %>
+                  <%- include("../partials/employeeslist") %>
+              </div> -->
+              <div>
+                <%- include("../partials/totalTable") %>
+              </div>
+            </div>
+          </div>
+          <%- include("../partials/footer") %>
+      </div>
+  </div>
+  <%- include("../partials/dashcode") %>
+
+
+  <script>
+  var socket = io.connect();
+      function setWs() {
+        socket.on('newdata', function (msg) {
+          var element = document.getElementById(msg.districtId);
+          element.innerText = msg.value;
+        })
+
+        socket.on('setdata', function (data) {
+          setData(data);
+        })
+
+        socket.on('newdata5min', function (data) {
+          chartIt(data)
+          chartIt1(data);
+          startConv(data);
+        })
+      }
+     
+    var x = []
+    var y = []
+    var x1 = []
+    var y1 = []
+    
+     async function chartIt(data) {
+        await getData(data);
+     
+        const ctx = document.getElementById('myChart').getContext('2d');
+        // ctx.save();
+        // ctx.setTransform(1, 0, 0, 1, 0, 0);
+         //ctx.clearRect(0, 0, document.getElementById('myChart').width, document.getElementById('myChart').height)
+
+        const myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: x,
+                datasets: [{
+                    label: '# זמן המתנה',
+                    data:y,
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        
+    }
+    function getData(data){
+      for (let i = 0; i < data.time.length; i++) {
+        x.push(data.time[i]);
+        y.push(data.Standby[i]);
+      }
+    }
+    async function chartIt1(data) {
+        await getData1(data);
+        const ctx = document.getElementById('Chart').getContext('2d');
+
+        const myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: x1,
+                datasets: [{
+                    label: '# שיחות ממתינות',
+                    data:y1,
+                    backgroundColor: 'rgba(100, 99, 132, 0.2)',
+                    borderColor: 'rgba(100, 99, 132, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+     function getData1(data){
+       for (let i = 0; i < data.time.length; i++) {
+        x1.push(data.time[i]);
+        y1.push(data.total[i]);
+      }
+    }
+    
+    
+    function startConv(data) {
+            for (let i = 0; i < data.time.length; i++) {
+          
+            var tr = document.getElementById('openConversations').insertRow();
+            var chour = tr.insertCell(0);
+            var cCalls_waiting= tr.insertCell(1);
+            var cStandby_time = tr.insertCell(2);
+            
+            
+            chour.innerHTML = data.time[i];
+            cCalls_waiting.innerHTML = data.total[i];
+            cStandby_time.innerHTML = data.Standby[i];
+
+            }
+        
+    }
+
+    var tr = document.getElementById('totalcalls').insertRow();
+            var chour = tr.insertCell(0);
+            var cCalls_waiting= tr.insertCell(1);
+            var cStandby_time = tr.insertCell(2);
+
+
+    function setData(data) {
+            
+            chour.innerHTML = data.joining;
+            cCalls_waiting.innerHTML = data.complaint;
+            cStandby_time.innerHTML = data.Disconnection;
+        
+    }
+
+</script>
+</body>
+
+</html>

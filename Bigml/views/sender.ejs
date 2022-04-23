@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
+
+    <script>
+
+        const socket = io('http://localhost:6064')
+        socket.on('connection')
+
+        function modelinfo() {
+            socket.emit('modelinfo');
+
+        }
+        socket.on('myPrediction', (data) => {
+            document.querySelector('h2').innerHTML = data
+            //startConv(data)
+        })
+
+        socket.on('redy', () => {
+            var str = 'Please wait ...'
+                document.querySelector('h1').innerHTML = str
+                setTimeout(function () {
+                    document.querySelector('h1').innerHTML = "redy !"
+                }, 10000);
+        })
+
+        function Prediction() {
+            var call = {}
+            call.age = parseInt(document.getElementById("age").value)
+            call.PrevCall = parseInt(document.getElementById("PrevCall").value)
+            call.city = document.getElementById("city").value
+            call.hour = document.getElementById("hour").value
+            call.gander = document.getElementById("gander").value
+            call.Period_type = document.getElementById("Period_type").value
+            socket.emit('Prediction', call);
+        }
+
+    </script>
+</head>
+
+<body>
+    <input type="button" id="Set" value="Create a prediction model" onclick="modelinfo()" />
+    <h1></h1>
+
+    <hr>
+    age:
+    <input type="number" id="age" min="0" max="120" value="0">
+    <br>
+    <br>
+    PrevCall:
+    <input type="number" id="PrevCall" min="0" max="120" value="0">
+    <br>
+    <br>
+    city:
+    <input type="text" id="city" value="">
+    <br>
+    <br>
+    hour:
+    <input type="time" id="hour" value="">
+    <br>
+    <br>
+    gander:
+    <input type="text" id="gander" value="">
+    <br>
+    <br>
+    Period_type:
+    <select id ="Period_type"><option value='Normal_days'>ימים רגילים</option><option value='Summer_vacation'>חופשת קיץ</option><option value='Holidays'>חגים</option></select>
+    <br>
+    <br>
+    <input type="button" id="Set" value="Check.." onclick="Prediction()" />
+    <br>
+    <br>
+    Call prediction :
+    <h2></h2>
+</body>
+
+</html>
