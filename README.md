@@ -9,4 +9,6 @@
  The goal of this project is to design a dashboard analitic system in big data perception which uses Mysql & NoSQL Databases, tools from Hadoop Ecosystem and microservices in typical architecture and implementing infrastructure challenges.
 
 ## Functional requirements
--
+- Customer data (name, social security number, date of birth, address, sex, list of products to which he is a subscriber) will be kept in an operational database.
+- The first micro-server is a data reception system (receiving calls) that transmits the data to two micro-servers
+- 
