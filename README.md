@@ -36,6 +36,8 @@ And resets at midnight or at the request of the user
 - Subsystem C will make it possible to analyze the historical data using a machine learning algorithm and create
 Call topic prediction model, using BigML.com services
 
+
+## project architecture
 ![image](https://user-images.githubusercontent.com/57864630/170966467-3ef22fa6-89d4-4e0b-b7bb-dc6f5969f528.png)
 
 <img width="949" alt="Screenshot 2022-04-26 040737" src="https://user-images.githubusercontent.com/57864630/170966638-b8fc2e3d-9e00-4fde-9345-5044d5df5035.png">
