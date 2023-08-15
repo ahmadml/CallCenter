@@ -18,13 +18,10 @@ class DbService {
   async getRandomeCustomer() {
     try {
       var id = Math.floor(Math.random() * 11) + 1
-      //console.log(id);
       while ((arrCustomerId.indexOf(id) !== -1)) {
         id = Math.floor(Math.random() * 11) + 1
-        //if (arrCustomerId.indexOf(id) === -1){arrCustomerId.push(id)}
       }
       arrCustomerId.push(id)
-      //console.log(id);
       const response = await new Promise((resolve, reject) => {
         const query = "SELECT * FROM Customers WHERE CustNumber = ?";
 
