@@ -6,7 +6,6 @@ const port = 3000
 
 const bodyParser = require('body-parser');
 const calls = require("./controllers/callcenter_controller.js");
-//const dbService = require('./models/callcenter_model');
 
 //------------ kafka------------
 const kafka = require('./publish');
@@ -36,7 +35,6 @@ liveReloadServer.server.once("connection", () => {
 
 app.set('view engine', 'ejs');
 app.use(express.static("public"));
-//app.refresh
 
 app.get('/', function (req, res) {
     res.render('sender')
@@ -44,7 +42,6 @@ app.get('/', function (req, res) {
 
 function getCall() {
 
-    // const db = dbService.getDbServiceInstance();
     const result = calls.getNextCall()
     result
         .then(data => console.log(data))
@@ -53,17 +50,13 @@ function getCall() {
     
 
 }
-//getCall()
 var date = 0;
 //------------ Socket.io ----------------
 io.on("connection", (socket) => {
-    //console.log(socket.id);
-    //var date = 0;
     socket.on("totalWaitingCalls", (msg) => {
         console.log(msg.totalWaiting.totalset);
         kafka.publish(msg.totalWaiting);
         date = msg.totalWaiting.Date;
-        //console.log(date);
         calls.recarr();
     });
 
@@ -72,7 +65,6 @@ io.on("connection", (socket) => {
         console.log(msg);
         kafka.publish(msg)
         const result =calls.updateById(msg.CusId,msg.prev);
-        //console.log((parseInt(msg.id) - date) / 1000);
 });
 
     socket.on('getcall', (data) => {
@@ -81,7 +73,7 @@ io.on("connection", (socket) => {
         kafka.publish(totalWaiting);
         const result = calls.getNextCall()
         result
-            .then(data => { socket.emit('call', data);/*console.log(data)*/ })
+            .then(data => { socket.emit('call', data);})
             .catch(err => console.log(err));
 
     });
