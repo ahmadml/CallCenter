@@ -13,7 +13,6 @@ module.exports.topicscallsfromRedis = () => {
     return redisdbR.prudoctcall();
 }
 
-//module.exports.gettopicscalls = redisdbR.ProductCalls;
 
 module.exports.AverageWaitingTime = () => {
     return redisdbR.AverageWaitingTime();
@@ -22,4 +21,3 @@ module.exports.AverageWaitingTime = () => {
 module.exports.Callsevery5minutes = (time) => {
     return redisdbR.callsfor5min(time);
 }
-//module.exports.Standbytime = redisdbR.Standbytime;
