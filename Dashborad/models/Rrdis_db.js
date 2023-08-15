@@ -1,10 +1,6 @@
 var express = require('express');
-//const { json } = require('mathjs');
 var app = require('express')();
 var server = require('http').Server(app);
-//var redis = require('redis');
-//var redisClient = redis.createClient();
-//var sub = redis.createClient()
 const redis = require('ioredis')
 const cron = require('node-cron');
 
@@ -18,13 +14,10 @@ const redisDb = new redis(conn);
 
 module.exports.addToRedis = (param) => {
     var myObj = JSON.parse(param);
-    //console.log("got a message: ",param)
     var Calltime = (myObj.startcall + "")
-    //console.log(Calltime);
     var key = Calltime;
     redisDb.lpush(key, myObj.totalWaitingTime, (err, reply) => {
         if (err) throw err;
-        //console.log(reply);
     })
     if (myObj.Product == "joining") {
         redisDb.lpush("joining", 1, (err, reply) => {
@@ -46,9 +39,6 @@ module.exports.addToRedis = (param) => {
             if (err) throw err;
         })
     }
-    // redisDb.expire(key, 599) 
-    // redisDb.sadd("Calls", param, function (err, res) {
-    // });
     redisDb.publish("message", param);
 }
 
@@ -60,7 +50,6 @@ module.exports.addToRedistotal = (param) => {
     var key = "set" + hour + ":" + minute
     redisDb.lpush(key, myObj.totalset, (err, reply) => {
         if (err) throw err;
-        //console.log(reply);
     })
 }
 
@@ -78,10 +67,6 @@ module.exports.deleteall = () =>{
     redisDb.Flushall
 }
 
-//Schedule tasks to be run on the server.
- //cron.schedule('* * *', function () {
-   // redisDb.Flushall
- //})
 
 app.use(function (req, res, next) {
     var err = new Error('Not Found');
