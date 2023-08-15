@@ -1,5 +1,4 @@
 
-//const CallCenterModel = require("../models/callcenter_model");
 const dbService = require('../models/callcenter_model');
 
 
@@ -27,9 +26,3 @@ exports.recarr = () => {
     dbService.recarrCustomerId();
 }
 
-
-
-
-// exports.getNextCall = () => {
-//    return db.getRandomeCustomer()
-// };
