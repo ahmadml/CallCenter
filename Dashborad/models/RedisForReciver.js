@@ -6,20 +6,9 @@ var server = require('http').Server(app);
 const Redis = require('ioredis')
 const redisDb = require('./Rrdis_db');
 const { disconnect } = require('process');
-//var redis = require('redis');
-//const { myPrediction } = require('./bigML');
-//var redisClient = redis.createClient();
-//var sub = redis.createClient()
 const redis = new Redis();
 redis.subscribe('message');
 
-// const conn = {
-//     port: 6379,
-//     host: "127.0.0.1",
-//     db: 0
-// };
-
-// const redisDb = new redis(conn);
 
 app.get('/', (req, res) => res.send('Hello World!'))
 
@@ -105,37 +94,8 @@ module.exports.prudoctcall = () => {
     complaint.then(data => ProductCalls.complaint = data.length)
     var Disconnection = redisDb.getToRedis("Disconnection");
     Disconnection.then(data => ProductCalls.Disconnection = data.length)
-    //console.log(ProductCalls);
     return ProductCalls;
 }
-
-//Schedule tasks to be run on the server.
-// cron.schedule('* * * * *', function () {
-//     const date = Date.now();
-//     const dateTimeFormat = new Intl.DateTimeFormat('en', { minute: 'numeric' })
-//     const [{ value: minute }] = dateTimeFormat.formatToParts(date)
-//     //console.log("mint now :",Number(minute));
-//     var modlu = Number(minute) % 10;
-//     while(totalwaitingcall[modlu].length){totalwaitingcall[modlu].pop()}
-
-// });
-
-// redis.on("message", function (channel, data) {
-//     //console.log("Got the Massage", data);
-//     var data = JSON.parse(data)
-//     var minute = (data.startcall + "").split(":");
-//     //console.log(minute);
-//     var modlu = minute[1] % 10;
-//     //console.log(modlu);
-//     //console.log(data.totalWaitingTime);
-//     totalwaitingcall[modlu].push(data.totalWaitingTime);
-//     //console.log("waiting",totalwaitingcall[modlu].toString());    
-// });
-
-//module.exports.waitingtime = totalwaitingcall;
-//module.exports.Standbytime = Standbytime;
-//module.exports.ProductCalls = ProductCalls;
-
 
 
 function exit(myList, j) {
